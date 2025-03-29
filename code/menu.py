@@ -4,7 +4,7 @@ import pygame.image
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import WIN_WIDTH, COLOR_ORANGE, MENU_OPTION, COLOR_WHITE, COLOR_YELLOW
+from code.Const import WIN_WIDTH, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW, C_CYAN, C_DARKCYAN
 
 
 class menu:
@@ -21,14 +21,14 @@ class menu:
         while True:
             # DRAW IMAGES
             self.window.blit(source=self.surf, dest=self.rect)  # desenho da imagem de background
-            self.menu_text(50, "Space", COLOR_WHITE, ((WIN_WIDTH / 2), 70))  # texto do Menu
-            self.menu_text(50, "Invasion", COLOR_WHITE, ((WIN_WIDTH / 2), 120))  # texto do Menu
+            self.menu_text(50, "Space", C_WHITE, ((WIN_WIDTH / 2), 70))  # texto do Menu
+            self.menu_text(50, "Invasion", C_WHITE, ((WIN_WIDTH / 2), 120))  # texto do Menu
 
             for i in range(len(MENU_OPTION)):
                 if i == menu_option:
-                    self.menu_text(20, MENU_OPTION[i], COLOR_YELLOW, ((WIN_WIDTH / 2), 200 + 25 * i))  # texto do Menu
+                    self.menu_text(20, MENU_OPTION[i], C_YELLOW, ((WIN_WIDTH / 2), 200 + 25 * i))  # texto do Menu
                 else:
-                    self.menu_text(20, MENU_OPTION[i], COLOR_WHITE, ((WIN_WIDTH / 2), 200 + 25 * i))  # texto do Menu
+                    self.menu_text(20, MENU_OPTION[i], C_WHITE, ((WIN_WIDTH / 2), 200 + 25 * i))  # texto do Menu
             pygame.display.flip()
 
             # Check for all events
