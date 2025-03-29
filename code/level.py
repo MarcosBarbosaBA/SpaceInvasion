@@ -7,7 +7,8 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import WIN_HEIGHT, C_WHITE, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME, C_DARKCYAN
+from code.Const import WIN_HEIGHT, C_WHITE, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME, C_DARKCYAN, EVENT_TIMEOUT, \
+    TIMEOUT_STEP, TIMEOUT_LEVEL
 from code.EntityMediator import EntityMediator
 from code.enemy import Enemy
 from code.entityFactory import EntityFactory
@@ -17,7 +18,7 @@ from code.player import Player
 
 class Level:
     def __init__(self, window, name, game_mode):
-        self.timeout = 20000  # 20 segundos
+        self.timeout = TIMEOUT_LEVEL  # 20 segundos
         self.window = window
         self.name = name
         self.game_mode = game_mode
@@ -25,6 +26,7 @@ class Level:
         self.entity_list.extend(EntityFactory.get_entity('Level1Bg'))
         self.entity_list.append(EntityFactory.get_entity('Player1'))
         pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
+        pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)  # 100 ms
 
     def run(self, ):
         pygame.mixer.music.load(f'./asset/{self.name}.mp3')
@@ -41,6 +43,7 @@ class Level:
                         self.entity_list.append(shoot)
                 if ent.name == 'Player1':
                     self.level_text(14, f'Player1 - Health: {ent.health}', C_DARKCYAN, (10, 25))
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()  # Close Window
@@ -48,7 +51,10 @@ class Level:
                 if event.type == EVENT_ENEMY:
                     choice = random.choice(('Enemy1', 'Enemy2'))
                     self.entity_list.append(EntityFactory.get_entity(choice))
-
+                if event.type == EVENT_TIMEOUT:
+                    self.timeout -= TIMEOUT_STEP
+                    if self.timeout == 0:
+                        return True
             # printed text
             self.level_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', C_WHITE, (10, 5))
             self.level_text(14, f'fps: {clock.get_fps():.0f}', C_WHITE, (10, WIN_HEIGHT - 35))
@@ -57,7 +63,7 @@ class Level:
             # Collisions
             EntityMediator.verify_collision(entity_list=self.entity_list)
             EntityMediator.verify_health(entity_list=self.entity_list)
-        pass
+
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)

@@ -1,3 +1,4 @@
+from code import level
 from code.Const import WIN_WIDTH
 from code.EnemyShot import EnemyShot
 from code.PlayerShot import PlayerShot
